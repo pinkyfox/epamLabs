@@ -1,15 +1,26 @@
-package com.fibonacci.model.calculationService;
+package com.fibonacci.model.services;
 
+import com.fibonacci.model.Fibonacci;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.HashMap;
 
+import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CalculateFibonacciSequenceServiceTest {
+	@Mock
+	private FibonacciCacheService cacheService;
 	private CalculateFibonacciSequenceService calculateFibonacciSequenceService;
+
 	private HashMap<Integer, Integer> testData;
+	private int key = 9;
+	private String value = "34";
 
 	@Before
 	public void init() {
@@ -40,4 +51,17 @@ public class CalculateFibonacciSequenceServiceTest {
 		}
 	}
 
+	@Test
+	public void checkCacheBeforeCalculatingWhenCallCalculate() {
+		calculateFibonacciSequenceService.setCacheService(cacheService);
+		calculateFibonacciSequenceService.calculate(key);
+		verify(cacheService).get(key);
+	}
+
+	@Test
+	public void ifCacheReturnNullThanStoreCalculationToCacheWhenCallCalculate() {
+		calculateFibonacciSequenceService.setCacheService(cacheService);
+		calculateFibonacciSequenceService.calculate(key);
+		verify(cacheService).save(new Fibonacci(key, value));
+	}
 }

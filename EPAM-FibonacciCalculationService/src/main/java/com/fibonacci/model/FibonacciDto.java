@@ -1,4 +1,4 @@
-package com.fibonacci.model.dto;
+package com.fibonacci.model;
 
 public class FibonacciDto {
 	private String  index;
