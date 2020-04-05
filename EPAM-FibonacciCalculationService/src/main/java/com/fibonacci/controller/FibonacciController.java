@@ -1,8 +1,8 @@
 package com.fibonacci.controller;
 
+import com.fibonacci.model.services.CalculateFibonacciSequenceService;
 import com.fibonacci.model.Fibonacci;
-import com.fibonacci.model.calculationService.CalculateFibonacciSequenceService;
-import com.fibonacci.model.dto.FibonacciDto;
+import com.fibonacci.model.FibonacciDto;
 import com.fibonacci.validator.FibonacciValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
