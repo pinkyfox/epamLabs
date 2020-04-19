@@ -1,6 +1,7 @@
 package com.fibonacci.model.services;
 
 import com.fibonacci.model.Fibonacci;
+import com.fibonacci.model.cache.FibonacciCache;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,32 +16,31 @@ import static org.junit.Assert.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class CalculateFibonacciSequenceServiceTest {
 	@Mock
-	private FibonacciCacheService cacheService;
+	private FibonacciCache cache;
 	private CalculateFibonacciSequenceService calculateFibonacciSequenceService;
 
-	private HashMap<Integer, Integer> testData;
+	private HashMap<Integer, Fibonacci> testData;
 	private int key = 9;
 	private String value = "34";
 
 	@Before
 	public void init() {
-		calculateFibonacciSequenceService = CalculateFibonacciSequenceService.getInstance();
+		calculateFibonacciSequenceService = new CalculateFibonacciSequenceService();
 		testData = new HashMap<>();
-		testData.put(0, 0);
-		testData.put(1, 1);
-		testData.put(2, 1);
-		testData.put(3, 2);
-		testData.put(4, 3);
-		testData.put(5, 5);
-		testData.put(6, 8);
-		testData.put(7, 13);
-		testData.put(8, 21);
+		testData.put(1, new Fibonacci(1, "1"));
+		testData.put(2, new Fibonacci(2, "1"));
+		testData.put(3, new Fibonacci(3, "2"));
+		testData.put(4, new Fibonacci(4, "3"));
+		testData.put(5, new Fibonacci(5, "5"));
+		testData.put(6, new Fibonacci(6, "8"));
+		testData.put(7, new Fibonacci(7, "13"));
+		testData.put(8, new Fibonacci(8, "21"));
 	}
 
 	@Test
 	public void fibonacciNumberWhenCalculate() {
-		for (Integer value : testData.keySet()) {
-			assertEquals(testData.get(value).toString(), calculateFibonacciSequenceService.calculate(value).getValue());
+		for (Integer key : testData.keySet()) {
+			assertEquals(testData.get(key), calculateFibonacciSequenceService.calculate(key));
 		}
 	}
 
@@ -53,15 +53,15 @@ public class CalculateFibonacciSequenceServiceTest {
 
 	@Test
 	public void checkCacheBeforeCalculatingWhenCallCalculate() {
-		calculateFibonacciSequenceService.setCacheService(cacheService);
+		calculateFibonacciSequenceService.setCacheService(cache);
 		calculateFibonacciSequenceService.calculate(key);
-		verify(cacheService).get(key);
+		verify(cache).get(key);
 	}
 
 	@Test
 	public void ifCacheReturnNullThanStoreCalculationToCacheWhenCallCalculate() {
-		calculateFibonacciSequenceService.setCacheService(cacheService);
+		calculateFibonacciSequenceService.setCacheService(cache);
 		calculateFibonacciSequenceService.calculate(key);
-		verify(cacheService).save(new Fibonacci(key, value));
+		verify(cache).store(key, new Fibonacci(key, value));
 	}
 }

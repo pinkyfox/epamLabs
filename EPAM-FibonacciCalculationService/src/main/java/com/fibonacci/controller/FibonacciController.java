@@ -3,6 +3,7 @@ package com.fibonacci.controller;
 import com.fibonacci.model.services.CalculateFibonacciSequenceService;
 import com.fibonacci.model.Fibonacci;
 import com.fibonacci.model.FibonacciDto;
+import com.fibonacci.model.services.FibonacciServiceAccessManager;
 import com.fibonacci.validator.FibonacciValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,11 +23,15 @@ public class FibonacciController {
 
 	@Autowired
 	private FibonacciValidator fibonacciValidator;
-	private CalculateFibonacciSequenceService calculateFibonacciSequenceService = CalculateFibonacciSequenceService.getInstance();
+	@Autowired
+	private FibonacciServiceAccessManager accessManager;
+	@Autowired
+	private CalculateFibonacciSequenceService calculateFibonacciSequenceService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String getForm(ModelMap model) {
 		logger.info("Getting fibonacci form");
+		accessManager.registerAccess();
 		model.put("fibonacciDto", new FibonacciDto());
 		return "calculation";
 	}
@@ -34,6 +39,7 @@ public class FibonacciController {
 	@RequestMapping(method = RequestMethod.POST)
 	public String sendResult(FibonacciDto fibonacciDto, ModelMap model, BindingResult result) {
 		logger.info("Getting fibonacci calculations");
+		accessManager.registerAccess();
 		fibonacciValidator.validate(fibonacciDto, result);
 		if (result.hasErrors()) {
 			logger.warn("Invalid input in fibonacci form. Sending response to the client");
