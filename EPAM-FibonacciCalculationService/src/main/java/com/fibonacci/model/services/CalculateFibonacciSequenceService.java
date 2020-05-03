@@ -1,6 +1,7 @@
 package com.fibonacci.model.services;
 
 import com.fibonacci.model.Fibonacci;
+import com.fibonacci.model.FibonacciDto;
 import com.fibonacci.model.cache.FibonacciCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +51,15 @@ public class CalculateFibonacciSequenceService {
 			cache.store(indexFibonacciNumber, fibonacciResult);
 		}
 		return fibonacciResult;
+	}
+
+	public Integer[] parseIndexSequence(FibonacciDto fibonacciDto) {
+		String[] stringIndexes = fibonacciDto.getIndex().split(", ");
+		Integer[] integerIndexes = new Integer[stringIndexes.length];
+		for (int i =0; i < integerIndexes.length; i++) {
+			integerIndexes[i] = Integer.parseInt(stringIndexes[i]);
+		}
+		return integerIndexes;
 	}
 
 }

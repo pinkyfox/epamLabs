@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/calculation")
 public class FibonacciController {
@@ -45,8 +49,11 @@ public class FibonacciController {
 			logger.warn("Invalid input in fibonacci form. Sending response to the client");
 			return "calculation";
 		}
-		Fibonacci fibonacci = calculateFibonacciSequenceService.calculate(Integer.parseInt(fibonacciDto.getIndex()));
-		model.addAttribute("fibonacci", fibonacci);
+		List<Fibonacci> list =  Arrays.stream(calculateFibonacciSequenceService.parseIndexSequence(fibonacciDto))
+				.parallel()
+				.map(index -> calculateFibonacciSequenceService.calculate(index))
+				.collect(Collectors.toList());
+		model.addAttribute("fibonacci", list);
 		return "result";
 	}
 }
