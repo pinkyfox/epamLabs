@@ -17,10 +17,10 @@
         </div>
         <div class="formbuilder-text form-group field-text-1583700808089">
             <label for="text-1583700808089" class="formbuilder-text-label">Enter the cradle number from the Fibonacci sequence</label>
-            <input type="text" placeholder="1" th:field="*{index}" class="form-control" name="text-1583700808089" access="false"
+            <input type="text" placeholder="1 or 1, 2, 3, 4" th:field="*{index}" class="form-control" name="text-1583700808089" access="false"
                    maxlength="30" id="text-1583700808089" title="Input 8. Answer is 21." autofocus>
             <ul>
-                <li style="font-weight:normal; font-family: Arial; color: #ff2812" th:each="err : ${#fields.errors('index')}" th:text="${err}"/>
+                <li style="font-weight:normal; font-family: Arial; color: #ff2812; font-style: italic" th:each="err : ${#fields.errors('index')}" th:text="${err}"/>
             </ul>
         </div>
         <div class="formbuilder-button form-group field-button-1583700597913">
