@@ -4,7 +4,11 @@ import java.util.Objects;
 
 public class Fibonacci {
 	private int index;
-	private String value = null;
+	private String value;
+
+	public Fibonacci() {
+
+	}
 
 	public Fibonacci(int index, String value) {
 		this.index = index;
@@ -25,6 +29,11 @@ public class Fibonacci {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public boolean isEmpty() {
+		return value == null ? true :
+				false;
 	}
 
 	@Override
