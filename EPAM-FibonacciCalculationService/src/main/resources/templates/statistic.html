@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Fibonacci Result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</head>
+<p>
+<h1 style="text-align: center">Fibonacci Calculation Service Statistic</h1>
+<h6 style="text-align: center" th:text="'Statistic for '+ ${time}"/>
+<div class="alert alert-light" role="alert" style="text-align: center">
+    <table class="table table-reflow">
+        <thead>
+        <tr>
+            <th style="text-align: center; vertical-align: text-top">Total qty of requests:</th>
+            <th style="text-align: center; vertical-align: text-top">Total qty of bad requests:</th>
+            <th style="text-align: center; vertical-align: text-top">Minimum calculated value:</th>
+            <th style="text-align: center; vertical-align: text-top">Maximum calculated value:</th>
+            <th style="text-align: center; vertical-align: text-top">The Fibonacci calculator's largest calculated sequence</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <div class="alert alert-success" role="alert" style="text-align: center">
+                    <p th:text="${statistic.getTotalRequestsQty()}"/>
+                </div>
+            </td>
+            <td>
+                <div class="alert alert-danger" role="alert" style="text-align: center">
+                    <p th:text="${statistic.getTotalBadRequestsQty()}"/>
+                </div>
+            </td>
+            <td th:switch="${statistic.getMinCalculatedValue().getValue()}">
+                <div class="alert alert-warning" role="alert" th:case="${null}" style="text-align: center">
+                    <p>None</p>
+                </div>
+                <div class="alert alert-info" role="alert" style="text-align: center" th:case="*">
+                    <p th:text="'Index: ' + ${statistic.getMinCalculatedValue().getIndex()}"/>
+                    <p th:text="'Result: ' + ${statistic.getMinCalculatedValue().getValue()}"/>
+                </div>
+            </td>
+            <td th:switch="${statistic.getMaxCalculatedValue().getValue()}">
+                <div class="alert alert-warning" role="alert" style="text-align: center" th:case="${null}">
+                    <p>None</p>
+                </div>
+                <div class="alert alert-info" role="alert" style="text-align: center" th:case="*">
+                    <p th:text="'Index: ' + ${statistic.getMaxCalculatedValue().getIndex()}"/>
+                    <p th:text="'Result: ' + ${statistic.getMaxCalculatedValue().getValue()}"/>
+                </div>
+            </td>
+            <td>
+                <div class="alert alert-warning" role="alert" style="text-align: center" th:if="${statistic.getLargestCalculatedSequence().size() == 0}">
+                    <p>None</p>
+                </div>
+                <div class="alert alert-info" role="alert" style="text-align: center" th:unless="${statistic.getLargestCalculatedSequence().size() == 0}" th:each="fib: ${statistic.getLargestCalculatedSequence()}">
+                        <p th:text="'Index: ' + ${fib.getIndex()}"/>
+                        <p th:text="'Result: ' + ${fib.getValue()}"/>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div style="text-align: center">
+    <a class="btn btn-primary" href="http://localhost:8080/calculation" role="button">Back</a>
+</div>
+</body>
+</html>

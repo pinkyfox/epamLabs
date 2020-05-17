@@ -1,8 +1,6 @@
 package com.fibonacci.model.cache;
 
 import com.fibonacci.model.Fibonacci;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.Map.Entry;
@@ -14,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 @Service("FibonacciCache")
 public class FibonacciCache {
-	private static final Logger logger = LogManager.getLogger();
 
 	private static ConcurrentHashMap<Integer, Fibonacci> objects;
 	private static ConcurrentHashMap<Integer, Long> expire;
@@ -32,17 +29,14 @@ public class FibonacciCache {
 	}
 
 	public int size() {
-		logger.info("Getting size of cache");
 		return objects.size();
 	}
 
 	public Fibonacci get(int key) {
-		logger.info("Transfer data form cache");
 		return objects.getOrDefault(key, null);
 	}
 
 	public void setCache(ConcurrentHashMap<Integer, Fibonacci> previousCalculation) {
-		logger.info("Setting up new cache");
 		FibonacciCache.objects.clear();
 		Set<Entry<Integer, Fibonacci>> set = previousCalculation.entrySet();
 		for(Entry<Integer, Fibonacci> entry : set) {
@@ -52,18 +46,15 @@ public class FibonacciCache {
 	}
 
 	public ConcurrentHashMap<Integer, Fibonacci> getCache() {
-		logger.info("Getting cache");
 		return FibonacciCache.objects;
 	}
 
 	public void store(int key, Fibonacci value) {
-		logger.info("Load data to cache");
 		objects.put(key, value);
 		expire.put(key, System.currentTimeMillis() + expirationDate);
 	}
 
 	public void remove(int key) {
-		logger.info("Removing data from cache");
 		objects.remove(key);
 		expire.remove(key);
 	}
