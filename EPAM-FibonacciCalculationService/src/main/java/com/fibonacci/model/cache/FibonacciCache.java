@@ -1,6 +1,10 @@
 package com.fibonacci.model.cache;
 
 import com.fibonacci.model.Fibonacci;
+import com.fibonacci.model.dao.CalculatedFibonacciValuesDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.Map.Entry;
@@ -13,9 +17,12 @@ import java.util.concurrent.TimeUnit;
 @Service("FibonacciCache")
 public class FibonacciCache {
 
+	@Autowired
+	private CalculatedFibonacciValuesDao fibonacciDao;
+
 	private static ConcurrentHashMap<Integer, Fibonacci> objects;
 	private static ConcurrentHashMap<Integer, Long> expire;
-	private long expirationDate = 120_000;
+	private long expirationDate = 600_000;
 	private static ExecutorService threads;
 
 	public FibonacciCache() {
@@ -39,9 +46,9 @@ public class FibonacciCache {
 	public void setCache(ConcurrentHashMap<Integer, Fibonacci> previousCalculation) {
 		FibonacciCache.objects.clear();
 		Set<Entry<Integer, Fibonacci>> set = previousCalculation.entrySet();
-		for(Entry<Integer, Fibonacci> entry : set) {
+		for (Entry<Integer, Fibonacci> entry : set) {
 			FibonacciCache.objects.put(entry.getKey(), entry.getValue());
-			FibonacciCache.expire.put((entry.getKey()), System.currentTimeMillis() + expirationDate);
+			FibonacciCache.expire.put(entry.getKey(), System.currentTimeMillis() + expirationDate);
 		}
 	}
 
@@ -50,6 +57,9 @@ public class FibonacciCache {
 	}
 
 	public void store(int key, Fibonacci value) {
+		if (!objects.containsKey(value.getIndex())) {
+			fibonacciDao.add(value);
+		}
 		objects.put(key, value);
 		expire.put(key, System.currentTimeMillis() + expirationDate);
 	}
@@ -76,4 +86,11 @@ public class FibonacciCache {
 		};
 	}
 
+	@EventListener(ApplicationReadyEvent.class)
+	private void setUpCacheFromDataBase() {
+		for (Fibonacci fibonacci : fibonacciDao.getAllThatLessOrEqual(250)) {
+			FibonacciCache.objects.put(fibonacci.getIndex(), fibonacci);
+			FibonacciCache.expire.put(fibonacci.getIndex(), System.currentTimeMillis() + expirationDate);
+		}
+	}
 }
