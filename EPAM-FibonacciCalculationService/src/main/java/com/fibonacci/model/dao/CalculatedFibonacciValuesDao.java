@@ -64,8 +64,8 @@ public class CalculatedFibonacciValuesDao {
 
 	private ArrayList<Fibonacci> get(String query) {
 		try (
-				Statement statement  = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery(query)
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(query);
 		) {
 			ArrayList<Fibonacci> result = new ArrayList<>();
 
