@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Fibonacci</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<form id="rendered-form" action="#" th:action="@{/asyncCalculation}" th:object="${fibonacciDto}" method="post">
+    <div class="rendered-form">
+        <div class="">
+            <h1 access="false" id="control-5867200">Fibonacci Sequence<br></h1>
+        </div>
+        <div class="formbuilder-text form-group field-text-1583700808089">
+            <label for="text-1583700808089" class="formbuilder-text-label">Enter the cradle number from the Fibonacci sequence</label>
+            <input type="text" placeholder="1 or 1, 2, 3, 4" th:field="*{index}" class="form-control" name="text-1583700808089" access="false"
+                   maxlength="1000" id="text-1583700808089" title="Input 8. Answer is 21." autofocus>
+            <ul>
+                <li style="font-weight:normal; font-family: Arial; color: #ff2812; font-style: italic" th:each="err : ${#fields.errors('index')}" th:text="${err}"/>
+            </ul>
+        </div>
+        <div class="formbuilder-button form-group field-button-1583700597913">
+            <button type="submit" class="btn-default btn" name="button-1583700597913" access="false" style="color: darkslategrey"
+                    id="button-1583700597913">Calculate<br>
+            </button>
+            <button type="reset" class="btn-warning btn" name="button-1583700668314" access="false" style="warning"
+                    id="button-1583700668314">Refresh<br>
+            </button>
+            <a class="btn btn-primary" href="http://localhost:8080/statistic" role="button">Statistic</a>
+        </div>
+        <div class="formbuilder-button form-group field-button-1583700668314">
+        </div>
+    </div>
+</form>
+</body>
